@@ -1,33 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import Card from "../../components/card";
+import { useStoreActions, useStoreState } from "easy-peasy";
+import Card from "../components/card";
 
 export default function Vocab() {
-  const [vocabs, setVocabs] = useState([]);
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = () => {
-    axios.get(`/api/card/${localStorage.getItem("username")}`).then(res => {
-      setVocabs(res.data);
-    });
-  };
+  const { username } = useStoreState(state => state.username);
+  const { vocab, loading } = useStoreState(state => state.vocab);
+  const { deleteVocab } = useStoreActions(actions => actions.vocab);
 
   const deleteCard = id => {
-    axios
-      .delete(`/api/card/${localStorage.getItem("username")}/${id}`)
-      .then(res => {
-        fetchData();
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    deleteVocab({ username, id });
   };
 
-  const list = vocabs.map((item, index) => {
+  const list = vocab.map((item, index) => {
     return (
       <div
         className="column is-12"
@@ -47,7 +32,10 @@ export default function Vocab() {
         {list}
       </div>
       <div className="column has-text-centered" style={{ paddingTop: 30 }}>
-        <Link to="/vocab/add" className="button is-warning hvr-pop">
+        <Link
+          to="/vocab/add"
+          className={`hvr-pop button is-warning ${loading ? "is-loading" : ""}`}
+        >
           Add Vocab
         </Link>
       </div>

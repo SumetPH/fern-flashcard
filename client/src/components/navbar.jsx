@@ -1,15 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
+import { useStoreState, useStoreActions } from "easy-peasy";
 
-import { AppContext } from "../lib/context";
 export default function Navbar() {
-  const { username } = useContext(AppContext);
+  const { username } = useStoreState(state => state.username);
+  const { logout } = useStoreActions(actions => actions.username);
   const history = useHistory();
 
   const Logout = () => {
-    localStorage.removeItem("username");
+    logout();
     history.go(0);
   };
+
   return (
     <div
       style={{

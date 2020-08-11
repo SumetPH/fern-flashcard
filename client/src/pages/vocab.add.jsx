@@ -1,29 +1,29 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 export default function Add() {
+  const { username } = useStoreState(state => state.username);
+  const { loading } = useStoreState(state => state.vocab);
+  const { addVocab } = useStoreActions(actions => actions.vocab);
   const history = useHistory();
   const [word, setword] = useState("");
   const [hint, sethint] = useState("");
   const [trans, settrans] = useState("");
 
-  const addVocab = () => {
-    setword("");
-    settrans("");
-    sethint("");
-    axios
-      .post(`/api/card/${localStorage.getItem("username")}`, {
-        word: word,
-        trans: trans,
-        hint: hint
-      })
-      .then(res => {
-        console.log(res);
-        if (res.status === 200) {
-          history.goBack();
-        }
-      });
+  const addVocabClick = () => {
+    addVocab({
+      username,
+      word,
+      hint,
+      trans
+    }).then(res => {
+      if (res) {
+        history.goBack();
+      } else {
+        alert("Something wrong!");
+      }
+    });
   };
 
   return (
@@ -69,9 +69,11 @@ export default function Add() {
         </div>
         <div className="column has-text-centered">
           <button
-            className="button is-primary hvr-sweep-to-right"
+            className={`button is-primary hvr-sweep-to-right ${
+              loading ? "is-loading" : ""
+            }`}
             style={{ margin: 5 }}
-            onClick={addVocab}
+            onClick={() => addVocabClick()}
             disabled={word !== "" && trans !== "" && hint !== "" ? false : true}
           >
             Save

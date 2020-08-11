@@ -1,31 +1,33 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { AppContext } from "./lib/context";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 import Login from "./components/login";
 import Navbar from "./components/navbar";
 import Home from "./pages/home";
-import Vocab from "./pages/vocab/index";
-import Add from "./pages/vocab/add";
-import Game from "./pages/game/index";
+import Vocab from "./pages/vocab";
+import Add from "./pages/vocab.add";
+import Game from "./pages/game";
 
 export default function App() {
-  const [username, setUsername] = useState();
+  const { username } = useStoreState(state => state.username);
+  const { getUsername } = useStoreActions(actions => actions.username);
+  const { getVocab } = useStoreActions(actions => actions.vocab);
 
   useEffect(() => {
-    setUsername(localStorage.getItem("username"));
-  }, []);
+    getUsername().then(res => {
+      getVocab(res);
+    });
+  }, [getUsername, getVocab]);
 
   return (
-    <AppContext.Provider value={{ username, setUsername }}>
-      <BrowserRouter>
-        <nav>
-          <Navbar />
-        </nav>
-        <section>{username === null ? <Login /> : <Router />}</section>
-      </BrowserRouter>
-    </AppContext.Provider>
+    <BrowserRouter>
+      <nav>
+        <Navbar />
+      </nav>
+      <section>{username === null ? <Login /> : <Router />}</section>
+    </BrowserRouter>
   );
 }
 

@@ -1,27 +1,20 @@
-import React, { useContext, useState } from "react";
-import { AppContext } from "../lib/context";
-import Axios from "axios";
+import React, { useState } from "react";
+import { useStoreActions } from "easy-peasy";
 
 export default function Login() {
-  const { setUsername } = useContext(AppContext);
+  const { login, setUsername } = useStoreActions(actions => actions.username);
+  const { getVocab } = useStoreActions(actions => actions.vocab);
   const [state, setState] = useState("");
 
-  const notLogin = () => {
-    localStorage.setItem("username", "Someone");
-    setUsername("Someone");
+  const handleLogin = () => {
+    login(state).then(res => {
+      getVocab(res);
+    });
   };
 
-  const handleLogin = () => {
-    console.log(state);
-    Axios.post("/api/login", {
-      username: state
-    })
-      .then(res => {
-        console.log(res.data);
-        localStorage.setItem("username", res.data);
-        setUsername(res.data);
-      })
-      .catch(err => console.log(err));
+  const notLogin = () => {
+    setUsername("Someone");
+    getVocab("Someone");
   };
 
   return (
@@ -29,11 +22,11 @@ export default function Login() {
       <div className="modal-background"></div>
       <div className="modal-card">
         <header className="modal-card-head">
-          <p className="modal-card-title">Do you want login.</p>
+          <p className="modal-card-title">What is your name?</p>
           <button
             className="delete"
             aria-label="close"
-            onClick={notLogin}
+            onClick={() => notLogin()}
           ></button>
         </header>
         <section className="modal-card-body">
@@ -57,7 +50,7 @@ export default function Login() {
           >
             Submit
           </button>
-          <button className="button" onClick={notLogin}>
+          <button className="button" onClick={() => notLogin()}>
             Cancel
           </button>
         </footer>
