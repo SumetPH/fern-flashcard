@@ -5,15 +5,12 @@ import { useEffect, useState } from "react";
 
 import Login from "./components/login";
 import Navbar from "./components/navbar";
-
 import Home from "./pages/home";
-
 import Vocab from "./pages/vocab/index";
 import Add from "./pages/vocab/add";
-
 import Game from "./pages/game/index";
 
-export default function Router() {
+export default function App() {
   const [username, setUsername] = useState();
 
   useEffect(() => {
@@ -22,21 +19,23 @@ export default function Router() {
 
   return (
     <AppContext.Provider value={{ username, setUsername }}>
-      {username === null ? (
-        <Login />
-      ) : (
-        <BrowserRouter>
+      <BrowserRouter>
+        <nav>
           <Navbar />
-          <Switch>
-            <Route exact path="/" component={Home} />
-
-            <Route exact path="/vocab" component={Vocab} />
-            <Route path="/vocab/add" component={Add} />
-
-            <Route path="/game" component={Game} />
-          </Switch>
-        </BrowserRouter>
-      )}
+        </nav>
+        <section>{username === null ? <Login /> : <Router />}</section>
+      </BrowserRouter>
     </AppContext.Provider>
+  );
+}
+
+function Router() {
+  return (
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/vocab" component={Vocab} />
+      <Route path="/vocab/add" component={Add} />
+      <Route path="/game" component={Game} />
+    </Switch>
   );
 }
