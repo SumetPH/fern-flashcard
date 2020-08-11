@@ -1,0 +1,29 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.box {
+  background-color: hsl(171, 100%, 41%);
+}
+
+.box1 {
+  background-color: yellowgreen;
+  width: 200px;
+  height: 1500px;
+}
+.box2 {
+  background-color: cadetblue;
+  width: 200px;
+  height: 1500px;
+}
