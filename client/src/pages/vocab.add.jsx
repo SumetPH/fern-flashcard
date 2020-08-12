@@ -1,24 +1,32 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useStoreActions, useStoreState } from "easy-peasy";
+import { useDispatch, useSelector } from "react-redux";
+import { addVocab, getVocab } from "../redux/actions";
+// import { useStoreActions, useStoreState } from "easy-peasy";
 
 export default function Add() {
-  const { username } = useStoreState(state => state.username);
-  const { loading } = useStoreState(state => state.vocab);
-  const { addVocab } = useStoreActions(actions => actions.vocab);
+  const dispatch = useDispatch();
+  const { loading } = useSelector(state => state.loadingReducer);
+  const { username } = useSelector(state => state.usernameReducer);
+  // const { username } = useStoreState(state => state.username);
+  // const { loading } = useStoreState(state => state.vocab);
+  // const { addVocab } = useStoreActions(actions => actions.vocab);
   const history = useHistory();
-  const [word, setword] = useState("");
-  const [hint, sethint] = useState("");
-  const [trans, settrans] = useState("");
+  const [word, setWord] = useState("");
+  const [hint, setHint] = useState("");
+  const [trans, setTrans] = useState("");
 
-  const addVocabClick = () => {
-    addVocab({
-      username,
-      word,
-      hint,
-      trans
-    }).then(res => {
+  const handleAddVocab = () => {
+    dispatch(
+      addVocab({
+        username,
+        word,
+        hint,
+        trans
+      })
+    ).then(res => {
       if (res) {
+        dispatch(getVocab(username));
         history.goBack();
       } else {
         alert("Something wrong!");
@@ -48,7 +56,7 @@ export default function Add() {
             className="input is-primary"
             type="text"
             placeholder="Word"
-            onChange={e => setword(e.target.value)}
+            onChange={e => setWord(e.target.value)}
           />
         </div>
         <div className="column">
@@ -56,7 +64,7 @@ export default function Add() {
             className="input is-primary"
             type="text"
             placeholder="Trans"
-            onChange={e => settrans(e.target.value)}
+            onChange={e => setTrans(e.target.value)}
           />
         </div>
         <div className="column">
@@ -64,7 +72,7 @@ export default function Add() {
             className="textarea is-primary"
             type="text"
             placeholder="Hint"
-            onChange={e => sethint(e.target.value)}
+            onChange={e => setHint(e.target.value)}
           />
         </div>
         <div className="column has-text-centered">
@@ -73,7 +81,7 @@ export default function Add() {
               loading ? "is-loading" : ""
             }`}
             style={{ margin: 5 }}
-            onClick={() => addVocabClick()}
+            onClick={() => handleAddVocab()}
             disabled={word !== "" && trans !== "" && hint !== "" ? false : true}
           >
             Save

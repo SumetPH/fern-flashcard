@@ -1,15 +1,17 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useStoreState, useStoreActions } from "easy-peasy";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/actions";
 
 export default function Navbar() {
-  const { username } = useStoreState(state => state.username);
-  const { logout } = useStoreActions(actions => actions.username);
+  const dispatch = useDispatch();
+  const { username } = useSelector(state => state.usernameReducer);
   const history = useHistory();
 
   const Logout = () => {
-    logout();
-    history.go(0);
+    dispatch(logout()).then(() => {
+      history.go(0);
+    });
   };
 
   return (

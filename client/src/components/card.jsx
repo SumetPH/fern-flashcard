@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { tts } from "../lib/tts";
-export default function Card({ item, deleteCard }) {
+export default function Card({ item, handleDeleteVocab }) {
   const [transEvent, setTransEvent] = useState(false);
   return (
     <div className="card" style={{ borderRadius: 18, width: 350 }}>
@@ -39,7 +39,7 @@ export default function Card({ item, deleteCard }) {
           className="card-footer-item has-text-black"
           onClick={e => {
             e.preventDefault();
-            deleteCard(item.id);
+            handleDeleteVocab(item.id);
           }}
         >
           Delete

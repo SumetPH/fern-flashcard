@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { useEffect } from "react";
-import { useStoreActions, useStoreState } from "easy-peasy";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsername, getVocab } from "./redux/actions";
 
 import Login from "./components/login";
 import Navbar from "./components/navbar";
@@ -11,15 +12,14 @@ import Add from "./pages/vocab.add";
 import Game from "./pages/game";
 
 export default function App() {
-  const { username } = useStoreState(state => state.username);
-  const { getUsername } = useStoreActions(actions => actions.username);
-  const { getVocab } = useStoreActions(actions => actions.vocab);
+  const { username } = useSelector(state => state.usernameReducer);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getUsername().then(res => {
-      getVocab(res);
+    dispatch(getUsername()).then(username => {
+      dispatch(getVocab(username));
     });
-  }, [getUsername, getVocab]);
+  }, [dispatch]);
 
   return (
     <BrowserRouter>

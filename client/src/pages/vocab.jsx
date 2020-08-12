@@ -1,15 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useStoreActions, useStoreState } from "easy-peasy";
+import { useSelector, useDispatch } from "react-redux";
+import { getVocab, deleteVocab } from "../redux/actions";
 import Card from "../components/card";
 
 export default function Vocab() {
-  const { username } = useStoreState(state => state.username);
-  const { vocab, loading } = useStoreState(state => state.vocab);
-  const { deleteVocab } = useStoreActions(actions => actions.vocab);
+  const dispatch = useDispatch();
+  const { loading } = useSelector(state => state.loadingReducer);
+  const { username } = useSelector(state => state.usernameReducer);
+  const { vocab } = useSelector(state => state.vocabReducer);
 
-  const deleteCard = id => {
-    deleteVocab({ username, id });
+  const handleDeleteVocab = id => {
+    dispatch(deleteVocab({ username, id }))
+      .then(() => {
+        dispatch(getVocab(username));
+      })
+      .catch(() => alert("Something wrong!"));
   };
 
   const list = vocab.map((item, index) => {
@@ -22,7 +28,7 @@ export default function Vocab() {
         }}
         key={index}
       >
-        <Card item={item} deleteCard={deleteCard} />
+        <Card item={item} handleDeleteVocab={handleDeleteVocab} />
       </div>
     );
   });

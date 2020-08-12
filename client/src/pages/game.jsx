@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useStoreState } from "easy-peasy";
+import { useSelector } from "react-redux";
 
 export default function Game() {
-  const { vocab } = useStoreState(state => state.vocab);
+  const { vocab } = useSelector(state => state.vocabReducer);
   const [ar, setAr] = useState([]);
   const [show, setShow] = useState(false);
   const [score, setScore] = useState(0);
@@ -46,7 +46,6 @@ export default function Game() {
   };
 
   const checkAnswer = answer => {
-    console.log(answer);
     if (answer === show.question.trans) {
       alert("Correct. You get one point.");
       setScore(score + 1);

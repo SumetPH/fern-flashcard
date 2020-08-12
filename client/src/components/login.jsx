@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { useStoreActions } from "easy-peasy";
+import { useDispatch } from "react-redux";
+import { login, notLogin, getVocab } from "../redux/actions";
 
 export default function Login() {
-  const { login, setUsername } = useStoreActions(actions => actions.username);
-  const { getVocab } = useStoreActions(actions => actions.vocab);
+  const dispatch = useDispatch();
   const [state, setState] = useState("");
 
   const handleLogin = () => {
-    login(state).then(res => {
-      getVocab(res);
+    dispatch(login(state)).then(username => {
+      dispatch(getVocab(username));
     });
   };
 
-  const notLogin = () => {
-    setUsername("Someone");
-    getVocab("Someone");
+  const handleNotLogin = () => {
+    dispatch(notLogin()).then(username => {
+      dispatch(getVocab(username));
+    });
   };
 
   return (
@@ -26,7 +27,7 @@ export default function Login() {
           <button
             className="delete"
             aria-label="close"
-            onClick={() => notLogin()}
+            onClick={() => handleNotLogin()}
           ></button>
         </header>
         <section className="modal-card-body">
@@ -45,12 +46,12 @@ export default function Login() {
         <footer className="modal-card-foot">
           <button
             className="button is-success"
-            onClick={handleLogin}
+            onClick={() => handleLogin()}
             disabled={state === "" ? true : false}
           >
             Submit
           </button>
-          <button className="button" onClick={() => notLogin()}>
+          <button className="button" onClick={() => handleNotLogin()}>
             Cancel
           </button>
         </footer>
