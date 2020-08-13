@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login, notLogin, getVocab } from "../redux/actions";
 
 export default function Login() {
   const dispatch = useDispatch();
+  const { loading } = useSelector(state => state.loadingReducer);
   const [state, setState] = useState("");
 
   const handleLogin = () => {
@@ -45,7 +46,7 @@ export default function Login() {
         </section>
         <footer className="modal-card-foot">
           <button
-            className="button is-success"
+            className={`button is-success ${loading ? "is-loading" : null}`}
             onClick={() => handleLogin()}
             disabled={state === "" ? true : false}
           >

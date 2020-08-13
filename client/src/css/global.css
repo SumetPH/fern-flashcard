@@ -1,4 +1,7 @@
-html,
+* {
+  box-sizing: border-box;
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -9,8 +12,28 @@ a {
   text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+.mh-100vh {
+  min-height: 100vh;
+}
+
+.d-f {
+  display: flex;
+}
+
+.fd-c {
+  flex-direction: column;
+}
+
+.fw-w {
+  flex-wrap: wrap;
+}
+
+.jc-c {
+  justify-content: center;
+}
+
+.ai-c {
+  align-items: center;
 }
 
 .box {

@@ -56,16 +56,7 @@ export default function Game() {
   };
 
   return (
-    <div
-      className="has-background-info"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column"
-      }}
-    >
+    <div className="section has-background-info mh-100vh d-f jc-c ai-c fd-c">
       {vocab.length > 2 ? (
         <>
           <div>
@@ -137,7 +128,9 @@ export default function Game() {
           )}
         </>
       ) : (
-        <h1 className="title has-text-white">You don't have enough vocab.</h1>
+        <h1 className="title has-text-white has-text-centered">
+          You don't have enough vocab.
+        </h1>
       )}
     </div>
   );

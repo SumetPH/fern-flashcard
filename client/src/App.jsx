@@ -17,7 +17,7 @@ export default function App() {
 
   useEffect(() => {
     dispatch(getUsername()).then(username => {
-      dispatch(getVocab(username));
+      if (username !== null) dispatch(getVocab(username));
     });
   }, [dispatch]);
 

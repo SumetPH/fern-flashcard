@@ -19,9 +19,11 @@ export const notLogin = () => async dispatch => {
 };
 
 export const login = username => async dispatch => {
+  dispatch({ type: LOADING, status: true });
   const res = await axios.post(`/api/login`, { username: username });
   await localStorage.setItem("username", username);
   dispatch({ type: SET_USERNAME, username: res.data });
+  dispatch({ type: LOADING, status: false });
   return res.data;
 };
 

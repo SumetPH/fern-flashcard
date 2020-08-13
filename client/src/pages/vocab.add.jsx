@@ -35,15 +35,7 @@ export default function Add() {
   };
 
   return (
-    <div
-      className="has-background-primary"
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh"
-      }}
-    >
+    <div className="section has-background-primary mh-100vh d-f jc-c ai-c">
       <div
         className="column is-6 has-background-white"
         style={{ borderRadius: 18, paddingTop: 20 }}
