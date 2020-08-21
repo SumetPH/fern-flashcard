@@ -6,7 +6,6 @@ const upload = multer({ dest: "./uploads" });
 
 // middleware
 const app = express();
-app.use(express.static(path.join(__dirname, "client", "build")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(upload.array());
@@ -16,15 +15,19 @@ app.use(morgan("dev"));
 const card = require("./api/card");
 app.use("/api", card);
 
-app.use("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../", "build")));
 
-app.use((err, req, res, next) => {
+  app.use("*", (_req, res) => {
+    res.sendFile(path.join(__dirname, "../", "build", "index.html"));
+  });
+}
+
+app.use((err, _req, res, _next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode).json({
     message: err.message,
-    stack: err.stack
+    stack: err.stack,
   });
 });
 
